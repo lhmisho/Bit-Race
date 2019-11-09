@@ -1,4 +1,5 @@
 import pygame
+import time
 
 pygame.init()
 
@@ -20,6 +21,24 @@ carImg = pygame.image.load('racecar.png')
 def car(x,y):
     gameDisplay.blit(carImg, (x,y))
 
+def text_object(text, font):
+    textSurface = font.render(text, True, black)
+    return textSurface, textSurface.get_rect()
+
+def message_display(text):
+    largeText = pygame.font.Font('freesansbold.ttf', 115)
+    textSurf, textRect = text_object(text, largeText)
+    textRect.center = ((display_width/2), (display_height/2))
+    gameDisplay.blit(textSurf, textRect)
+    pygame.display.update()
+
+    time.sleep(2)
+    game_loop()
+
+
+def crash():
+    message_display("You Crashed!")
+
 def game_loop():
     x = (display_width * 0.45)
     y = (display_height * 0.8)
@@ -31,7 +50,8 @@ def game_loop():
     while not game_exit:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                game_exit = True
+                pygame.quit()
+                quit()
 
         # determining key press
             if event.type == pygame.KEYDOWN:
@@ -56,14 +76,15 @@ def game_loop():
         car(x,y)
 
         if x < 0:
-            x_change = 1
+            # x_change = 1
+            crash()
         if x > display_width - car_width:
             x_change = -1
         if y < 0:
             y_change = 1
         if y > display_height - car_width:
             y_change = -1
-            
+
         pygame.display.update()
         clock.tick(100)
 
