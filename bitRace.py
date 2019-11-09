@@ -1,5 +1,6 @@
 import pygame
 import time
+import random
 
 pygame.init()
 
@@ -17,6 +18,10 @@ car_width = 73
 
 clock = pygame.time.Clock()
 carImg = pygame.image.load('racecar.png')
+
+def things(thingsX, thingsY, thingsW, thingsH, color):
+    pygame.draw.rect(gameDisplay, color, [thingsX, thingsY, thingsW, thingsH])
+    
 
 def car(x,y):
     gameDisplay.blit(carImg, (x,y))
@@ -44,8 +49,14 @@ def game_loop():
     y = (display_height * 0.8)
     x_change = 0
     y_change = 0
-    car_speed = 0
     game_exit = False
+
+    thing_startx = random.randrange(0, display_width)
+    thing_starty = -600
+    thing_speed = 7
+    thing_width = 100
+    thing_height = 100
+
 
     while not game_exit:
         for event in pygame.event.get():
@@ -73,6 +84,11 @@ def game_loop():
         y += y_change
 
         gameDisplay.fill(white)
+
+
+        # things(thingsX, thingsY, thingsW, thingsH, color)
+        things(thing_startx, thing_starty, thing_width, thing_height, black)
+        thing_starty += thing_speed
         car(x,y)
 
         if x < 0:
@@ -84,6 +100,11 @@ def game_loop():
             y_change = 1
         if y > display_height - car_width:
             y_change = -1
+
+
+        if thing_starty > display_height:
+            thing_starty = 0 - thing_height
+            thing_startx = random.randrange(0,display_width)
 
         pygame.display.update()
         clock.tick(100)
